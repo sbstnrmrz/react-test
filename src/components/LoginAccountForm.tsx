@@ -25,7 +25,7 @@ export const LoginAccountForm = () => {
   }
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-7 p-8 bg-[#292929] shadow-xl rounded-[8px]">
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-7 ">
       <div>
         <span className="block text-base font-bold">Username</span>
         <input className="input-style" type="text" 
@@ -58,7 +58,6 @@ export const LoginAccountForm = () => {
         <pre className="text-xs">{data}</pre>
       }
       <button className="button-style">Login</button>
-      <a href='#' className="underline flex justify-center text-xs">Don't have an account? Create it here</a>
     </form>
   )
 }
