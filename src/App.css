@@ -44,4 +44,12 @@
 }
 
 .button-style {
-  @apply cursor-pointer flex text-base items-center justify-center font-medium rounded-[6px] bg-white text-black px-4 py-2 hover:bg-white/90}
+  @apply cursor-pointer flex text-base items-center justify-center font-medium rounded-[6px] bg-white text-black px-4 py-2 hover:bg-white/90
+}
+
+.error-msg {
+  @apply text-center text-base text-red-300
+}
+
+
+

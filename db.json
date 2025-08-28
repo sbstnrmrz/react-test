@@ -1,4 +1,11 @@
 {
   "users": [
+    {
+      "id": "7f24",
+      "name": "skibidi25",
+      "email": "asd@as.com",
+      "password": "12345",
+      "createdAt": "2025-08-28T15:53:58.266Z"
+    }
   ]
 }
