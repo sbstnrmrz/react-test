@@ -1,5 +1,7 @@
 export type User = {
-  name: string,
+  firstName: string,
+  lastName: string,
+  username: string,
   email: string,
   password: string,
   createdAt: Date,
@@ -39,7 +41,7 @@ export const checkUserExists = async(username: string) => {
   try {
     const res = await fetch(`${api_url}/users`); 
     const data = await res.json();
-    const exists = data.some((user: any) => user.name === username);
+    const exists = data.some((user: any) => user.username === username);
     if (exists) {
       console.log('user:', username,'already exists!');
     }
@@ -68,12 +70,6 @@ export const checkEmailExists = async(email: string) => {
 
 export const checkPasswordMatch = async(username: string, _password: string): Promise<boolean> => {
   try {
-    // maybe this is redundant
-//  const userExists = await checkUserExists(username);
-//  if (!userExists) {
-//    console.log('user for check password doesnt exists!');
-//    return false;
-//  }
 
     console.warn(`trying to get user c=for comparing: ${username}`);
     

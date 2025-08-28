@@ -3,6 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form"
 import * as Users from '../api/users'
 import { CreateAccountForm } from "../components/CreateAccountForm";
 import { LoginAccountForm } from "../components/LoginAccountForm";
+import * as api from '../api/index'
 
 export const LoginPage = () => {
   let sectionMsg: string[] = [

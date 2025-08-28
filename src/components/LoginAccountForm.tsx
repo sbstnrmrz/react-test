@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as Users from '../api/users'
+import * as api from '../api/index'
 
 type Inputs = {
   username: string,
@@ -15,10 +16,10 @@ export const LoginAccountForm = () => {
     setData(JSON.stringify(data));
     console.log(data);
 
-    const checkUserExists = await Users.checkUserExists(data.username);
+    const checkUserExists = await api.Users.checkUserExists(data.username);
     if (!checkUserExists) return; 
   
-    const passwordMatch = await Users.checkPasswordMatch(data.username, data.password);
+    const passwordMatch = await api.Users.checkPasswordMatch(data.username, data.password);
     if (!passwordMatch) return; 
 
     console.log(`login with user: ${data.username} successful!`);
@@ -54,9 +55,6 @@ export const LoginAccountForm = () => {
           <p className="error-msg">{errors.password?.message}</p>
         }
       </div>
-      {data && 
-        <pre className="text-xs">{data}</pre>
-      }
       <button className="button-style">Login</button>
     </form>
   )

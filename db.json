@@ -1,11 +1,19 @@
 {
   "users": [
     {
-      "id": "7f24",
-      "name": "skibidi25",
-      "email": "asd@as.com",
-      "password": "12345",
-      "createdAt": "2025-08-28T15:53:58.266Z"
+      "id": "ff3b",
+      "firstName": "Pedro",
+      "lastName": "Perez",
+      "username": "pedro25",
+      "email": "pedro.perez@gmail.com",
+      "password": "contrA.25",
+      "createdAt": "2025-08-28T20:11:06.179Z"
     }
-  ]
+  ],
+  "events": [
+    
+  ],
+  "comments": [
+
+  ],
 }
