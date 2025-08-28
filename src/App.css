@@ -1,5 +1,7 @@
+@import "tailwindcss";
+
 .App {
-  text-align: center;
+  background-color: #171717;
 }
 
 .App-logo {
@@ -14,7 +16,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -36,3 +38,10 @@
     transform: rotate(360deg);
   }
 }
+
+.input-style {
+  @apply text-base border-1 border-[#222222] bg-[#404040] rounded-[6px] py-[4px] px-[12px]
+}
+
+.button-style {
+  @apply cursor-pointer flex text-base items-center justify-center font-medium rounded-[6px] bg-white text-black px-4 py-2 hover:bg-white/90}
