@@ -7,15 +7,28 @@ export type User = {
   createdAt: Date,
 }
 
-const api_url = process.env.REACT_APP_API_URL != undefined ? process.env.REACT_APP_API_URL : 'localhost:3333'; 
+const apiUrl = process.env.REACT_APP_API_URL != undefined ? process.env.REACT_APP_API_URL : 'localhost:3333'; 
 
 export const createUser = async(user: User) => {
-
+  try {
+    const res = await fetch(`${apiUrl}/users`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': "application/json"
+      },
+      body: JSON.stringify(user)
+    });
+    const resData = await res.json();
+    console.log('res status:', res.statusText); 
+    console.log(resData);
+  } catch (error) {
+    throw `error creating new user: ${user.username}. Error ${error}`;  
+  }
 }
 
 export const getUser = async(username: string): Promise<User> => {
   try {
-    const res = await fetch(`${api_url}/users?name=${username}`);
+    const res = await fetch(`${apiUrl}/users?name=${username}`);
     const data = (await res.json())[0];
     console.log(`fetched user:`);
     console.log(data);
@@ -28,7 +41,7 @@ export const getUser = async(username: string): Promise<User> => {
 export const getUsers = async(): Promise<User[]> => {
   let data;
   try {
-    const res = await fetch(`${api_url}/users`);
+    const res = await fetch(`${apiUrl}/users`);
     data = await res.json();
   } catch (error) {
     throw `error fetching users. Error: ${error}`;  
@@ -39,7 +52,7 @@ export const getUsers = async(): Promise<User[]> => {
 
 export const checkUserExists = async(username: string) => {
   try {
-    const res = await fetch(`${api_url}/users`); 
+    const res = await fetch(`${apiUrl}/users`); 
     const data = await res.json();
     const exists = data.some((user: any) => user.username === username);
     if (exists) {
@@ -55,7 +68,7 @@ export const checkUserExists = async(username: string) => {
 
 export const checkEmailExists = async(email: string) => {
   try {
-    const res = await fetch(`${api_url}/users`); 
+    const res = await fetch(`${apiUrl}/users`); 
     const data = await res.json();
     const exists = data.some((user: User) => user.email === email);
     if (exists) {
@@ -70,13 +83,11 @@ export const checkEmailExists = async(email: string) => {
 
 export const checkPasswordMatch = async(username: string, _password: string): Promise<boolean> => {
   try {
-
     console.warn(`trying to get user c=for comparing: ${username}`);
     
     const user = await getUser(username);
     console.log('user for password:');
     console.log(user);
-    
     
     console.warn(`savedpass: ${user.password}, inputpass: ${_password}`);
     

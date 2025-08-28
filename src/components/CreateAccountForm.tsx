@@ -32,17 +32,7 @@ export const CreateAccountForm = () => {
       createdAt: new Date()
     };
 
-    const res = await fetch('http://localhost:3333/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': "application/json"
-      },
-      body: JSON.stringify(user)
-    });
-    const resData = await res.json();
-    console.log('res status:', res.statusText); 
-
-    console.log(resData);
+    await api.Users.createUser(user);
   }
 
   return (

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as Users from '../api/users'
 import * as api from '../api/index'
+import { useNavigate } from "react-router-dom";
 
 type Inputs = {
   username: string,
@@ -11,6 +12,7 @@ type Inputs = {
 export const LoginAccountForm = () => {
   const {register, handleSubmit, formState: {errors}} = useForm<Inputs>()
   const [data, setData] = useState('');
+  const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
     setData(JSON.stringify(data));
@@ -23,6 +25,8 @@ export const LoginAccountForm = () => {
     if (!passwordMatch) return; 
 
     console.log(`login with user: ${data.username} successful!`);
+    navigate('/profile')
+
   }
 
   return (
