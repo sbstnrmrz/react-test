@@ -6,6 +6,7 @@ import { ProfilePage } from './pages/ProfilePage';
 import { BrowserRouter, Navigate, Route, Router, Routes } from 'react-router-dom';
 import { AppContextProvider } from './context/AppContextProvider';
 import { AppContext } from './context/AppContext';
+import { DashboardPage } from './pages/DashboardPage';
 
 function App() {
   return (
@@ -15,7 +16,7 @@ function App() {
           <Route path='/' element={<Navigate to="/login" replace/>}/>
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/profile/:username' element={<ProfilePage/>}/>
-          <Route path='/dashboard' element={<ProfilePage/>}/>
+          <Route path='/dashboard' element={<DashboardPage/>}/>
         </Routes>
       </BrowserRouter>
     </AppContextProvider>

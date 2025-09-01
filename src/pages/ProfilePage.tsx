@@ -23,11 +23,7 @@ export const ProfilePage = () => {
   const [isUserLogged, setIsUserLogged] = useState(false);
   
   const navigate = useNavigate();
-
   const {username} = useParams();
-//if (username == undefined) {
-//  navigate('/login');
-//}
 
   useEffect(() => {
     const loadUser = async() => {

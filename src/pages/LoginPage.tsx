@@ -32,7 +32,7 @@ export const LoginPage = () => {
       const user = api.Users.getUserFromLocalStorage();
       context.loggedUser = user;
       console.log('user is logged');
-      navigate(`/profile/${user?.username}`);
+      navigate(`/dashboard`);
     }
   }, [navigate]);
   
