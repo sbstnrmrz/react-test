@@ -8,12 +8,17 @@
       "email": "pedro.perez@gmail.com",
       "password": "contrA.25",
       "createdAt": "2025-08-28T20:11:06.179Z"
+    },
+    {
+      "id": "d490",
+      "firstName": "Skibidi",
+      "lastName": "Fernandez",
+      "username": "skibidi05",
+      "email": "skibidi.fernandez@gmail.com",
+      "password": "qweasD25$",
+      "createdAt": "2025-08-30T17:30:45.107Z"
     }
   ],
-  "events": [
-    
-  ],
-  "comments": [
-
-  ]
+  "events": [],
+  "comments": []
 }

@@ -1,4 +1,5 @@
 export type User = {
+  id?: string,
   firstName: string,
   lastName: string,
   username: string,
@@ -28,7 +29,7 @@ export const createUser = async(user: User) => {
 
 export const getUser = async(username: string): Promise<User> => {
   try {
-    const res = await fetch(`${apiUrl}/users?name=${username}`);
+    const res = await fetch(`${apiUrl}/users?username=${username}`);
     const data = (await res.json())[0];
     console.log(`fetched user:`);
     console.log(data);
@@ -103,3 +104,33 @@ export const checkPasswordMatch = async(username: string, _password: string): Pr
     throw `error checking password match. Error: ${error}`; 
   }
 }
+
+export const isUserLogged = () => {
+  const item = localStorage.getItem('user');
+  if (item != undefined) {
+    return true;
+  }
+
+  return false;
+}
+
+export const getUserFromLocalStorage = () => {
+  const localItem = localStorage.getItem('user');
+  if (localItem == undefined) return;
+
+  const user: User = JSON.parse(localItem);
+
+  return user;
+}
+
+export const saveUserToLocalStorage = (user: User) => {
+  localStorage.setItem('user', JSON.stringify(user));
+}
+
+export const logout = () => {
+}
+
+export const setCookies = async() => {
+
+}
+

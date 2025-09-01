@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import * as Users from '../api/users'
 import * as api from '../api/index'
 import { useNavigate } from "react-router-dom";
+import { AppContext } from "../context/AppContext";
 
 type Inputs = {
   username: string,
@@ -14,6 +15,8 @@ export const LoginAccountForm = () => {
   const [data, setData] = useState('');
   const navigate = useNavigate();
 
+  const context = useContext(AppContext);
+
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
     setData(JSON.stringify(data));
     console.log(data);
@@ -24,9 +27,12 @@ export const LoginAccountForm = () => {
     const passwordMatch = await api.Users.checkPasswordMatch(data.username, data.password);
     if (!passwordMatch) return; 
 
-    console.log(`login with user: ${data.username} successful!`);
-    navigate('/profile')
+    const user = await api.Users.getUser(data.username);
+    api.Users.saveUserToLocalStorage(user);
+    context.loggedUser = user;
 
+    console.log(`login with user: ${data.username} successful!`);
+    navigate(`/profile/${data.username}`);
   }
 
   return (
@@ -43,7 +49,6 @@ export const LoginAccountForm = () => {
           })
           } 
         />
-
       </div>
       <div>
         <span className="block text-base font-bold">Password</span>
