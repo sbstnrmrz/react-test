@@ -5,6 +5,7 @@ import { EventPostModal } from "./EventPostModal";
 export const Sidebar = () => {
   const {loggedUser} = useContext(AppContext);
   const [showEventPostModal, setShowEventPostModal] = useState(false);
+
   return (
     <div className="sidebar-container">
       {showEventPostModal &&

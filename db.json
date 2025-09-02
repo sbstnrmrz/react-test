@@ -19,6 +19,23 @@
       "createdAt": "2025-08-30T17:30:45.107Z"
     }
   ],
-  "events": [],
+  "events": [
+    {
+      "id": "477c",
+      "title": "Queso",
+      "description": "arriba",
+      "userId": "ff3b",
+      "createdAt": 1756773639706,
+      "takesPlace": 1756773640706
+    },
+    {
+      "id": "6db0",
+      "title": "skibidi",
+      "description": "mañana",
+      "userId": "ff3b",
+      "createdAt": 1756773708374,
+      "takesPlace": 1756773709374
+    }
+  ],
   "comments": []
 }

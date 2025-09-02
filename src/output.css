@@ -192,9 +192,6 @@
   .mt-auto {
     margin-top: auto;
   }
-  .mb-2 {
-    margin-bottom: calc(var(--spacing) * 2);
-  }
   .block {
     display: block;
   }
@@ -207,17 +204,17 @@
   .h-10 {
     height: calc(var(--spacing) * 10);
   }
+  .h-12 {
+    height: calc(var(--spacing) * 12);
+  }
+  .h-15 {
+    height: calc(var(--spacing) * 15);
+  }
   .h-64 {
     height: calc(var(--spacing) * 64);
   }
-  .h-\[24px\] {
-    height: 24px;
-  }
   .h-\[32px\] {
     height: 32px;
-  }
-  .w-64 {
-    width: calc(var(--spacing) * 64);
   }
   .w-100 {
     width: calc(var(--spacing) * 100);
@@ -276,9 +273,6 @@
   .rounded-\[8px\] {
     border-radius: 8px;
   }
-  .rounded-full {
-    border-radius: calc(infinity * 1px);
-  }
   .border {
     border-style: var(--tw-border-style);
     border-width: 1px;
@@ -292,9 +286,6 @@
   }
   .bg-\[\#292929\] {
     background-color: #292929;
-  }
-  .bg-blue-300 {
-    background-color: var(--color-blue-300);
   }
   .bg-blue-500 {
     background-color: var(--color-blue-500);
@@ -312,10 +303,6 @@
   .text-base {
     font-size: var(--text-base);
     line-height: var(--tw-leading, var(--text-base--line-height));
-  }
-  .text-xl {
-    font-size: var(--text-xl);
-    line-height: var(--tw-leading, var(--text-xl--line-height));
   }
   .text-xs {
     font-size: var(--text-xs);
@@ -368,26 +355,6 @@
       }
     }
   }
-  .hover\:bg-white\/30 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, #fff 30%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-white) 30%, transparent);
-        }
-      }
-    }
-  }
-  .hover\:bg-white\/60 {
-    &:hover {
-      @media (hover: hover) {
-        background-color: color-mix(in srgb, #fff 60%, transparent);
-        @supports (color: color-mix(in lab, red, red)) {
-          background-color: color-mix(in oklab, var(--color-white) 60%, transparent);
-        }
-      }
-    }
-  }
   .hover\:text-white\/60 {
     &:hover {
       @media (hover: hover) {
@@ -423,6 +390,15 @@
   padding-block: 4px;
   font-size: var(--text-base);
   line-height: var(--tw-leading, var(--text-base--line-height));
+}
+.input-style2 {
+  border-radius: 6px;
+  border-style: var(--tw-border-style);
+  border-width: 1px;
+  border-color: #222222;
+  background-color: #404040;
+  padding-inline: 12px;
+  padding-block: 4px;
 }
 .button-style {
   display: flex;

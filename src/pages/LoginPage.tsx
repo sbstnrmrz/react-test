@@ -30,7 +30,8 @@ export const LoginPage = () => {
   useEffect(() => {
     if (api.Users.isUserLogged()) {
       const user = api.Users.getUserFromLocalStorage();
-      context.loggedUser = user;
+      if (user == undefined) return;
+      context.setLoggedUser(user);
       console.log('user is logged');
       navigate(`/dashboard`);
     }
