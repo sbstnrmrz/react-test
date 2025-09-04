@@ -7,22 +7,27 @@ import { useNavigate } from "react-router-dom"
 export const DashboardPage = () => {
   const context = useContext(AppContext);
   const navigate = useNavigate();
+  console.log('profile context:');
+  console.log(context);
   
-  useEffect(() => {
-    if (api.Users.isUserLogged()) {
-      const user = api.Users.getUserFromLocalStorage();
-      if (user == undefined) return;
-      context.setLoggedUser(user);
-      console.log('user is logged');
-      return;
-    }
+//useEffect(() => {
+//  if (context.loggedUser) {
+//    return;
+//  }
 
-    navigate(`/login`);
-  }, []);
+//  if (api.Users.isUserLogged()) {
+//    const user = api.Users.getUserFromLocalStorage();
+//    if (user == undefined) return;
+//    context.setLoggedUser(user);
+//    console.log('user is logged');
+//    return;
+//  }
+
+//  navigate(`/login`);
+//}, []);
 
   return (
     <div>
-      <Sidebar/>
     </div>
   )
 }

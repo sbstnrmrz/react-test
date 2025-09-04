@@ -39,6 +39,18 @@ export const getUser = async(username: string): Promise<User> => {
   }
 }
 
+export const getUserById = async(id: string): Promise<User> => {
+  try {
+    const res = await fetch(`${apiUrl}/users?id=${id}`);
+    const data = (await res.json())[0];
+    console.log(`fetched user:`);
+    console.log(data);
+    return data;
+  } catch (error) {
+    throw `error fetching user by id: ${id}. Error: ${error}`;
+  }
+}
+
 export const getUsers = async(): Promise<User[]> => {
   let data;
   try {
@@ -127,7 +139,8 @@ export const saveUserToLocalStorage = (user: User) => {
   localStorage.setItem('user', JSON.stringify(user));
 }
 
-export const logout = () => {
+export const logoutUser = () => {
+  localStorage.removeItem('user');
 }
 
 export const setCookies = async() => {

@@ -61,4 +61,8 @@
   @apply h-full text-white 
 }
 
+.event-post {
+  @apply p-4 rounded-[6px] border-white border-1 break-words
+}
+
 

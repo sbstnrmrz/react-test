@@ -32,7 +32,7 @@ export const LoginAccountForm = () => {
     context.loggedUser = user;
 
     console.log(`login with user: ${data.username} successful!`);
-    navigate(`/profile/${data.username}`);
+    navigate(`/dashboard`);
   }
 
   return (

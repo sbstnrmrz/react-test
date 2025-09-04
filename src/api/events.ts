@@ -1,4 +1,5 @@
 export type _Event =  {
+  id?: string,
   title: string,
   description: string,
   userId: string,
@@ -33,3 +34,15 @@ export const getUserEventPosts = async(userId: string) => {
     throw `error gettin user '${userId}' event post: ${error}`;
   }
 }
+
+export const getEventPost = async(id: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/events?id=${id}`); 
+    console.log(`get post by id: ${id} event posts response: ` + res.statusText);
+    const data: _Event = (await res.json())[0];
+    return data;
+  } catch (error) {
+    throw `error gettin user '${id}' event post: ${error}`;
+  }
+}
+

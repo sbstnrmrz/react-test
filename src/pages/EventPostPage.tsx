@@ -1,0 +1,95 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { PostComment } from "../components/PostComment"
+import { getEventComments, _Comment } from "../api/comments";
+import { getUserById, User } from "../api/users";
+import { getEventPost, _Event } from "../api/events";
+import { getFmtDate, getFmtTime } from "../utils/utils";
+
+export const EventPostPage = () => {
+  const navigate = useNavigate();
+  const {id} = useParams();
+  if (id == undefined) {
+    navigate('/dashboard'); 
+  }
+
+  const _id = id != undefined ? id : '';
+
+
+  const [event, setEvent] = useState<_Event | undefined>();
+  const [comments, setComments] = useState<_Comment[]>([]);
+  const [user, setUser] = useState<User | undefined>();
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadEvent = async() => {
+      const _event = await getEventPost(_id);
+      setEvent(_event);
+      console.log('event info loaded');
+
+    }
+
+    const loadComments = async() => {
+      const _comments = await getEventComments(_id);
+      setComments(_comments);
+      console.log('comments loaded');
+    }
+
+    const loadUser = async() => {
+      const _user = await getUserById(event?.userId != undefined ? event.userId : '' );
+      setUser(_user);
+      console.log(`user ${_user.username} loaded`);
+    }
+
+    loadEvent();
+    loadComments();
+    loadUser();
+  
+    return () => {
+      controller.abort();
+    }
+  }, [])
+
+
+  const renderComments = () => {
+    return comments.map(comment => <PostComment comment={comment}/>);
+  }
+
+  const fmtName = `${user?.firstName} ${user?.lastName}`;
+  const date = event?.createdAt != undefined ? event.createdAt : Date.now();
+
+  return (
+    <div className=" p-6 w-full max-w-[650px] h-[100vh] overflow-auto">
+      <div>
+        <span className="block text-[15px] font-bold">{fmtName}</span>
+        <span className="block text-[15px] text-white/50">{`@${user?.username}`}</span>
+      </div>
+      <div className="my-4 break-words">
+        <span className="block text-[24px] font-bold">Titulo: {event?.title}</span>
+        <p>{event?.description}</p>
+      </div>
+
+      <div className="bottom-0 text-gray-400 my-2">
+        {`${getFmtDate(date)} - ${getFmtTime(date)}`} | Tiempo restante: 20 dias
+      </div>
+
+      <hr/>
+
+      <div className="flex grow-0 bottom-0 py-2 text-gray-400">
+        <a className="flex items-center gap-1 hover:bg-white hover:text-black text-white fill-white hover:fill-black"
+          href={`#`}
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1xvli5t r-1hdv0qi"><g><path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 8.129 3.64 8.129 8.13 0 2.96-1.607 5.68-4.196 7.11l-8.054 4.46v-3.69h-.067c-4.49.1-8.183-3.51-8.183-8.01zm8.005-6c-3.317 0-6.005 2.69-6.005 6 0 3.37 2.77 6.08 6.138 6.01l.351-.01h1.761v2.3l5.087-2.81c1.951-1.08 3.163-3.13 3.163-5.36 0-3.39-2.744-6.13-6.129-6.13H9.756z"></path></g></svg>
+          <span>{comments.length}</span>
+        </a>
+      </div>
+      <hr/>
+
+      <div className="comments-container flex flex-col mt-4 gap-4 w-full">
+        {renderComments()}
+      </div>
+      
+    </div>
+  )
+}

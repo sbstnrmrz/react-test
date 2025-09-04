@@ -7,6 +7,9 @@ import { BrowserRouter, Navigate, Route, Router, Routes } from 'react-router-dom
 import { AppContextProvider } from './context/AppContextProvider';
 import { AppContext } from './context/AppContext';
 import { DashboardPage } from './pages/DashboardPage';
+import { Layout } from './components/Layout';
+import { EventPostPage } from './pages/EventPostPage';
+import { NotFoundPage } from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -15,8 +18,11 @@ function App() {
         <Routes>
           <Route path='/' element={<Navigate to="/login" replace/>}/>
           <Route path='/login' element={<LoginPage/>}/>
-          <Route path='/profile/:username' element={<ProfilePage/>}/>
-          <Route path='/dashboard' element={<DashboardPage/>}/>
+          <Route path='/profile/:username' element={<Layout><ProfilePage/></Layout>}/>
+          <Route path='/event-post' element={<Layout><EventPostPage/></Layout>}/>
+          <Route path='/event/:id' element={<Layout><EventPostPage/></Layout>}/>
+          <Route path='/dashboard' element={<Layout><DashboardPage/></Layout>}/>
+          <Route path='*' element={<NotFoundPage/>}/>
         </Routes>
       </BrowserRouter>
     </AppContextProvider>

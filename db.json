@@ -35,7 +35,30 @@
       "userId": "ff3b",
       "createdAt": 1756773708374,
       "takesPlace": 1756773709374
+    },
+    {
+      "id": "4899",
+      "title": "Ajua",
+      "description": "hakuna matata",
+      "userId": "ff3b",
+      "createdAt": 1756840331378,
+      "takesPlace": 1756840332378
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "id": "c607",
+      "text": "asasd wasacaca",
+      "userId": "ff3b",
+      "eventId": "477c",
+      "createdAt": 1756917472234
+    },
+    {
+      "id": "6696",
+      "text": "asasd wasacaca y cachapa",
+      "userId": "ff3b",
+      "eventId": "477c",
+      "createdAt": 1756917565295
+    }
+  ]
 }

@@ -44,7 +44,6 @@ export const EventPostModal = (props: EventPostModalProps) => {
             }}
           >
           </textarea>
-          <span>{description}</span>
         </div>
         <div className="flex justify-between items-end">
           <div>

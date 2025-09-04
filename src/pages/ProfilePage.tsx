@@ -3,6 +3,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
 import * as api from '../api/index'
+import { _Event } from "../api/events";
+import {EventPost} from "../components/EventPost"
 
 type Inputs = {
   firstName: string,
@@ -15,42 +17,65 @@ export const ProfilePage = () => {
   const showModal = () => setShowEditModal(true);
   const hideModal = () => setShowEditModal(false);
   const {loggedUser} = useContext(AppContext);
+  console.log('context loggedUser');
+  console.log(loggedUser);
 
   const {register, handleSubmit, formState: {errors}} = useForm<Inputs>()
   const [data, setData] = useState('');
 
   const [user, setUser] = useState<api.Users.User | undefined>();
   const [isUserLogged, setIsUserLogged] = useState(false);
+
+  const [posts, setPosts] = useState<_Event[]>([]);
   
   const navigate = useNavigate();
   const {username} = useParams();
 
   useEffect(() => {
+    if (!username) return;
+    const controller = new AbortController();
+
     const loadUser = async() => {
       try {
         if (username == undefined) return;
         const _user = await api.Users.getUser(username);
         console.log(`load user: ${username}`);
-        
+        if (_user.id == undefined) return;
+        const _posts = await api.Events.getUserEventPosts(_user.id);
+
         setUser(_user);
+        setPosts(_posts);
         console.log('logged user:');
         console.log(loggedUser);
-        if (_user.username == loggedUser?.username) {
+        console.log('fetched event posts:');
+        console.log(posts);
+        
+        if (_user.username === loggedUser?.username) {
           console.log('tralalero tralala');
           setIsUserLogged(true); 
         }
+
       } catch (error) {
         throw `Error loading user: ${username}. Error: ${error}`
       }
     }
 
     loadUser();
-    return;
-  }, [username]);
+    return () => {
+      controller.abort();
+    }
+  }, [loggedUser]);
 
 
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
 
+  }
+
+  // TODO: post id data whatever
+  const renderPosts = () => {
+    return posts.map(post => {
+      return <EventPost eventPost={post}/>
+    })
   }
 
   return (
@@ -136,18 +161,8 @@ export const ProfilePage = () => {
           </button>
         </div>
         <hr className="my-4"/>
-        <div className="event-posts-container" onClick={() => {}}> <div className="event-post p-4 rounded-[6px] border-white border-1 break-words">
-          <p>ajsdklashdlkashdkaslahskdbaskdbajsdkabdbajkbsdkjabdkabskdjbkasdhasdkjahdjkahdkahsdkjashdkhsa</p>
-          <div className="bottom-0 text-gray-400">
-            Creado el: 04/05/25 | Ocurre el: 08/08/25 | Tiempo restante: 20 dias
-          </div>
-        </div>
-          <div className="event-post p-4 rounded-[6px] border-white border-1 break-words">
-            <p>ajsdklashdlkashdkaslahskdbaskdbajsdkabdbajkbsdkjabdkabskdjbkasdhasdkjahdjkahdkahsdkjashdkhsa</p>
-            <div className="bottom-0 text-gray-400">
-              Creado el: 04/05/25 | Ocurre el: 08/08/25 | Tiempo restante: 20 dias
-            </div>
-          </div>
+        <div className="event-posts-container" onClick={() => {}}> 
+          {renderPosts()}
         </div>
       </div>
 
