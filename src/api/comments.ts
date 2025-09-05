@@ -19,6 +19,9 @@ export const createComment = async(comment: _Comment) => {
 
     console.log('res status:', res.statusText); 
     console.log('comment created for event:', comment.eventId); 
+    const data = await res.json();
+    return data;
+
   } catch (error) {
     throw `Error creating comment for event: ${comment.eventId}. ${error}` 
   }

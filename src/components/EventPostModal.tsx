@@ -1,6 +1,7 @@
 import { useContext, useState } from "react"
 import { AppContext } from "../context/AppContext";
 import * as api from '../api/index'
+import { useNavigate } from "react-router-dom";
 
 interface EventPostModalProps {
   show?: boolean,
@@ -14,6 +15,8 @@ export const EventPostModal = (props: EventPostModalProps) => {
   const [takePlaceDate, setTakePlaceData] = useState('');
   const [postButtonDisabled, setPostButtonDisabled] = useState(false);
 
+  const navigate = useNavigate();
+
   return (
     <div className="modal-container">
       <div className="p-8 bg-[#292929] shadow-xl rounded-[8px]">
@@ -22,7 +25,7 @@ export const EventPostModal = (props: EventPostModalProps) => {
             className="flex cursor-pointer items-center justify-center w-[32px] h-[32px] text-[24px] hover:bg-white/20 rounded-[6px]"
             onClick={props.onClose}
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true" className="text-white r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-z80fyv r-19wmn03" style={{"color": '#ffffff'}}><g><path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path></g></svg>
+            <svg viewBox="0 0 24 24" aria-hidden="true" className="fill-white r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-z80fyv r-19wmn03" style={{"color": '#ffffff'}}><g><path d="M10.59 12L4.54 5.96l1.42-1.42L12 10.59l6.04-6.05 1.42 1.42L13.41 12l6.05 6.04-1.42 1.42L12 13.41l-6.04 6.05-1.42-1.42L10.59 12z"></path></g></svg>
           </button>
         </div>
         <div className="flex flex-col my-4 gap-4">
@@ -66,8 +69,8 @@ export const EventPostModal = (props: EventPostModalProps) => {
               console.log(_event);
 
               setPostButtonDisabled(true);
-              await api.Events.createEventPost(_event);
-              setPostButtonDisabled(false);
+              const createdEvent = await api.Events.createEventPost(_event);
+              navigate(`/event/${createdEvent.id}`);
 
               if (props.onClose != undefined) props.onClose();
             }}  

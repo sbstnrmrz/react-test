@@ -18,7 +18,10 @@ export const createEventPost = async(_event: _Event) => {
       },
       body: JSON.stringify(_event)
     }); 
+    const data: _Event = await res.json();
+    console.log(data);
     console.log('create event post response: ' + res.statusText);
+    return data;
   } catch (error) {
     throw `error creating event post: ${error}`;
   }
@@ -33,6 +36,19 @@ export const getUserEventPosts = async(userId: string) => {
   } catch (error) {
     throw `error gettin user '${userId}' event post: ${error}`;
   }
+}
+
+export const getEventPosts = async() => {
+  try {
+    const res = await fetch(`${apiUrl}/events`);
+    console.log(`fetched all event posts: ` + res.statusText);
+    const data: _Event[] = await res.json();
+    return data;
+    
+  } catch (error) {
+    throw `error gettin event posts: ${error}`;
+  }
+
 }
 
 export const getEventPost = async(id: string) => {

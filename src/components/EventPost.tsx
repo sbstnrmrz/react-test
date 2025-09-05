@@ -14,11 +14,6 @@ export const EventPost = (props: EventPostProps) => {
   const _id = id == undefined ? 'noId' : id;
   const date = new Date(createdAt);
   const navigate = useNavigate();
-  
-//const day = date.getDay().toString().padStart(2, '0');
-//const month = (date.getMonth()+1).toString().padStart(2, '0');
-//const year = date.getFullYear().toString().slice(2);
-//const fmtDate = `${day}/${month}/${year}`;
 
   const day = date.getDay().toString();
   const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
@@ -34,6 +29,8 @@ export const EventPost = (props: EventPostProps) => {
 
     const loadUserInfo = async() => {
       const _user = await getUserById(userId);
+      console.log(`event post - got user: ${_user.username}`);
+      
       setUser(_user);
     }
     
@@ -65,7 +62,9 @@ export const EventPost = (props: EventPostProps) => {
         }}  
 
       >
-        <a className="cursor-pointer">
+        <a className="cursor-pointer"
+          href={`/profile/${user?.username}`}
+        >
           <span className="block text-[15px] font-bold hover:underline">{fmtName}</span>
           <span className="block text-[15px] text-white/50">{`@${user?.username}`}</span>
         </a>
@@ -76,7 +75,7 @@ export const EventPost = (props: EventPostProps) => {
         {fmtDate} | Ocurre el: 08/08/25 | Tiempo restante: 20 dias
       </div>
       <div className="flex grow-0 bottom-0 text-gray-400">
-        <a className="flex items-center gap-1 hover:bg-white hover:text-black fill-white hover:fill-black"
+        <a className="flex items-center gap-1 fill-gray-400 text-gray-400 hover:text-white hover:fill-white cursor-pointer"
           onClick={() => {
             setShowCommentModal(true); 
           }}

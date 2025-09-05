@@ -79,7 +79,7 @@ export const ProfilePage = () => {
   }
 
   return (
-    <div>
+    <div className=" p-6 w-full max-w-[650px] h-[100vh] overflow-auto">
       {showEditModal &&
         <div className="modal-container">
           <div className="p-8 bg-[#292929] shadow-xl rounded-[8px]">

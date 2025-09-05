@@ -13,6 +13,10 @@ export const PostCommentModal = (props: PostCommentModalProps) => {
   const [commentText, setCommentText] = useState('');;
   const [postCommentDisabled, setPostCommentDisabled] = useState(false);
 
+  if (props.eventId == 'noId') {
+    if (props.onClose != undefined) props.onClose();
+  }
+
   return (
     <div className="modal-container">
       <div className="p-8 bg-[#292929] shadow-xl rounded-[8px]">
@@ -52,6 +56,8 @@ export const PostCommentModal = (props: PostCommentModalProps) => {
               setPostCommentDisabled(true);
               await createComment(comment);
               setPostCommentDisabled(false);
+              if (props.onClose != undefined) props.onClose();
+              
             }}  
             disabled={postCommentDisabled}
           >
