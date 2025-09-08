@@ -4,10 +4,11 @@ import { PostComment } from "../components/PostComment"
 import { createComment, getEventComments, _Comment } from "../api/comments";
 import { getUserById, User } from "../api/users";
 import { getEventPost, _Event } from "../api/events";
-import { getFmtDate, getFmtTime } from "../utils/utils";
+import { getFmtDate, getFmtDuration, getFmtTime, getFmtTimeSecs } from "../utils/utils";
 import { AppContext } from "../context/AppContext";
 import { EventPostModal } from "../components/EventPostModal";
 import { PostCommentModal } from "../components/PostCommentModal";
+import { log } from "console";
 
 export const EventPostPage = () => {
   const navigate = useNavigate();
@@ -20,13 +21,17 @@ export const EventPostPage = () => {
 
   const {loggedUser} = useContext(AppContext); 
 
+
+
   const [event, setEvent] = useState<_Event | undefined>();
+
   const [comments, setComments] = useState<_Comment[]>([]);
   const [user, setUser] = useState<User | undefined>();
   const [commentText, setCommentText] = useState('');
   const [postCommentDisabled, setPostCommentDisabled] = useState(false);
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [reloadCommentsTrigger, setReloadCommentsTrigger] = useState(0);
+  const [timeLeft, setTimeLeft] = useState<number | undefined>(undefined);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -48,7 +53,7 @@ export const EventPostPage = () => {
     return () => {
       controller.abort();
     }
-  }, []);
+  }, [_id]);
 
   useEffect(() => {
     const loadComments = async() => {
@@ -62,7 +67,18 @@ export const EventPostPage = () => {
     return () => {
     }
   }, [reloadCommentsTrigger]);
- 
+
+  useEffect(() => {
+    if (!event) {
+      return;
+    }
+    const calcTimeLeft = () => event.takesPlace - Date.now();
+    const timer = setInterval(() => {
+      setTimeLeft(calcTimeLeft());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, [event]);
 
   const handleCommentAdded = () => {
     setShowCommentModal(false);
@@ -75,6 +91,7 @@ export const EventPostPage = () => {
 
   const fmtName = `${user?.firstName} ${user?.lastName}`;
   const date = event?.createdAt != undefined ? event.createdAt : Date.now();
+  const takesPlaceDate = event?.takesPlace != undefined ? event.takesPlace : Date.now();
 
   return (
     <div className=" p-6 w-full max-w-[650px] h-[100vh] overflow-auto">
@@ -88,7 +105,10 @@ export const EventPostPage = () => {
       </div>
 
       <div className="bottom-0 text-gray-400 my-2">
-        {`${getFmtDate(date)} - ${getFmtTime(date)}`} | Tiempo restante: 20 dias
+        <span className="block">{`Published: ${getFmtDate(date)} - ${getFmtTime(date)}`}</span>
+        <span className="block">{`Takes place: ${getFmtDate(takesPlaceDate)} - ${getFmtTime(takesPlaceDate)}`}</span>
+        <span>Time until: {`${timeLeft != undefined ? getFmtDuration(timeLeft) : undefined}`}</span>
+        
       </div>
 
       <hr/>
@@ -98,8 +118,6 @@ export const EventPostPage = () => {
           eventId={event?.id != undefined ? event.id : 'noId'}
         />
       }
-
-
       <div className="flex grow-0 bottom-0 py-2 text-gray-400">
         <a className="flex items-center gap-1 fill-gray-400 text-gray-400 hover:text-white hover:fill-white cursor-pointer"
           onClick={() => {setShowCommentModal(true)}}

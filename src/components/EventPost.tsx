@@ -1,16 +1,20 @@
-import { useEffect, useState } from "react";
+import { AppContext } from "context/AppContext";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getEventComments, _Comment } from "../api/comments";
-import { _Event } from "../api/events"
+import { deleteComment, getEventComments, _Comment } from "../api/comments";
+import { deleteEvent, _Event } from "../api/events"
 import { getUserById, User } from "../api/users";
 import { getFmtDate, getFmtTime } from "../utils/utils";
 import { PostCommentModal } from "./PostCommentModal";
 
 interface EventPostProps {
-  eventPost: _Event
+  eventPost: _Event,
+  onDelete?: () => void
 }
 
 export const EventPost = (props: EventPostProps) => {
+  const {loggedUser} = useContext(AppContext);
+
   const {title, description, createdAt, id, userId, takesPlace} = props.eventPost;
   const _id = id == undefined ? 'noId' : id;
 
@@ -87,7 +91,29 @@ export const EventPost = (props: EventPostProps) => {
           <svg viewBox="0 0 24 24" aria-hidden="true" className="h-6 r-4qtqp9 r-yyyyoo r-dnmrzs r-bnwqim r-lrvibr r-m6rgpd r-1xvli5t r-1hdv0qi"><g><path d="M1.751 10c0-4.42 3.584-8 8.005-8h4.366c4.49 0 8.129 3.64 8.129 8.13 0 2.96-1.607 5.68-4.196 7.11l-8.054 4.46v-3.69h-.067c-4.49.1-8.183-3.51-8.183-8.01zm8.005-6c-3.317 0-6.005 2.69-6.005 6 0 3.37 2.77 6.08 6.138 6.01l.351-.01h1.761v2.3l5.087-2.81c1.951-1.08 3.163-3.13 3.163-5.36 0-3.39-2.744-6.13-6.129-6.13H9.756z"></path></g></svg>
           <span>{comments.length}</span>
         </a>
+
+
       </div>
+
+      {loggedUser?.id == props.eventPost.userId &&
+        <div className="flex justify-end">
+          <span className="hover:underline"
+            onClick={async() => {
+              if (props.eventPost.id) {
+                await deleteEvent(props.eventPost.id);
+              }
+
+              if (props.onDelete) {
+                props.onDelete();
+              }
+            }}
+          >
+            Delete event
+          </span>
+        </div>
+      }
+
     </div>
+
   )
 }

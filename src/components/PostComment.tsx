@@ -1,13 +1,17 @@
-import { useEffect, useState } from 'react';
+import { deleteComment } from 'api/comments';
+import { AppContext } from 'context/AppContext';
+import { useContext, useEffect, useState } from 'react';
 import * as api from '../api/index'
 import { getUserById, User } from '../api/users';
 import { getFmtDate, getFmtTime } from '../utils/utils';
 
 interface PostCommentProps {
   comment: api.Comments._Comment;
+  onDelete?: () => void
 }
 
-export const PostComment = ({comment}: PostCommentProps) => {
+export const PostComment = ({comment, onDelete}: PostCommentProps) => {
+  const {loggedUser} = useContext(AppContext);
   const apiUrl = process.env.REACT_APP_API_URL != undefined ? process.env.REACT_APP_API_URL : 'localhost:3333'; 
   const [text, setText] = useState(comment.text);
   const [user, setUser] = useState<User | undefined>();
@@ -47,6 +51,25 @@ export const PostComment = ({comment}: PostCommentProps) => {
       <div className="bottom-0 text-gray-400 my-2">
         {`${date} - ${time}`}
       </div>
+
+      {loggedUser?.id == comment.userId &&
+        <div className="flex justify-end">
+          <span className="cursor-pointer hover:underline"
+            onClick={async() => {
+              if (comment.id) {
+                await deleteComment(comment.id);
+              }
+
+              if (onDelete) {
+                onDelete();
+              }
+            }}
+          >
+            Delete comment 
+          </span>
+        </div>
+      }
+
     </div>
   )
 }

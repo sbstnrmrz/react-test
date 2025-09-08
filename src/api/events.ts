@@ -62,3 +62,15 @@ export const getEventPost = async(id: string) => {
   }
 }
 
+
+export const deleteEvent = async(eventId: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/events/${eventId}`, {
+      method: 'DELETE'
+    });
+    console.log(`deleted event: ${eventId}`);
+  } catch (error) {
+    throw `error deleting event: ${error}`;  
+  }
+}
+

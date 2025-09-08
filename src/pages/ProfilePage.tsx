@@ -71,10 +71,9 @@ export const ProfilePage = () => {
 
   }
 
-  // TODO: post id data whatever
   const renderPosts = () => {
     return posts.map(post => {
-      return <EventPost eventPost={post}/>
+      return <EventPost key={post.id} eventPost={post}/>
     })
   }
 

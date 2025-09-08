@@ -1,4 +1,5 @@
 export type _Comment = {
+  id?: string,
   text: string,
   userId: string,
   eventId: string,
@@ -36,6 +37,17 @@ export const getEventComments = async(eventId: string): Promise<_Comment[]> => {
     return data;
   } catch (error) {
     throw `error fetching comments. Error: ${error}`;  
+  }
+}
+
+export const deleteComment = async(commentId: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/comments/${commentId}`, {
+      method: 'delete'
+    });
+    console.log(`deleted comment: ${commentId}`);
+  } catch (error) {
+    throw `error deleting comment: ${error}`;  
   }
 }
 

@@ -46,15 +46,17 @@ export function DateTimePicker(props: DateTimePickerProps) {
               selected={date}
               captionLayout="dropdown"
               onSelect={(_date) => {
-                console.log('skibidi correct');
-
-                _date?.setHours(date != undefined ? date.getHours() : 0); 
-                setDate(_date);
+                if (_date) {
+                  console.log('skibidi correct');
+                  
+                  _date.setHours(date != undefined ? date.getHours() : 0); 
+                  setDate(_date);
+                }
 
                 if (props.onDateSelected) {
-                  props.onDateSelected(_date);
+                  props.onDateSelected(date);
                 }
-                console.log('date: ' + _date);
+                console.log('date: ' + date);
 
                 setOpen(false);
               }}

@@ -44,6 +44,7 @@ export const EventPostModal = (props: EventPostModalProps) => {
             onChange={(e) => {
               setTitle(e.target.value);
             }}
+            maxLength={30}
           />
           <textarea className="w-100 h-64 resize-none text-2xl outline-0 rounded-[6px] border-1 p-4" 
             name="" id="" 
@@ -53,6 +54,7 @@ export const EventPostModal = (props: EventPostModalProps) => {
               setDescription(e.target.value);
               console.log('modal desc: ' + description);
             }}
+            maxLength={150}
           >
           </textarea>
         </div>
@@ -67,6 +69,10 @@ export const EventPostModal = (props: EventPostModalProps) => {
               console.log(takePlaceDate);
               if (takePlaceDate == undefined || takePlaceDate.getTime() <= Date.now()) {
                 console.log('date is less than current date');
+                return;
+              }
+              if (description.length < 1 || title.length < 1) {
+                console.log('description or title is empty');
                 return;
               }
               const _event: api.Events._Event = {
