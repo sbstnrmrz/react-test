@@ -147,3 +147,19 @@ export const setCookies = async() => {
 
 }
 
+export const modifyUser = async (user: User) => {
+  try {
+    const res = await fetch(`${apiUrl}/users/${user?.id}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(user)
+    });
+    const data = res.json();
+    console.log(`patch user ${user?.id}. status: ${res.statusText}`);
+  } catch (error) {
+    throw `error modifying user ${user?.id}`
+  }
+}
+

@@ -17,7 +17,11 @@ export const DashboardPage = () => {
   const [filterText, setFilterText] = useState('');
   const [users, setUsers] = useState<User[]>([]);
   const [userFilter, setUserFilter] = useState('All');
+  const [reloadPostsTrigger, setReloadPostsTrigger] = useState(0);
 
+
+  // loads events and reload them when the state of reloadPostsTrigger changes 
+  // the reloadPostsTrigger change when an event is deleted
   useEffect(() => {
     const loadEventPosts = async() => {
       const _posts = await getEventPosts();
@@ -32,8 +36,9 @@ export const DashboardPage = () => {
     }
     loadEventPosts();
     if (users.length < 1) loadUsers();
-  }, []);
+  }, [reloadPostsTrigger]);
 
+  // this filters the events by default 'All' 
   useEffect(() => {
     let filtered = [...eventPosts];
 
@@ -44,6 +49,7 @@ export const DashboardPage = () => {
       }
     }
 
+    // removes whitespaces for the text filter
     if (filterText.trim() !== "") {
       filtered = filtered.filter(p =>
         p.title.toLowerCase().includes(filterText.toLowerCase())
@@ -54,11 +60,13 @@ export const DashboardPage = () => {
   }, [userFilter, filterText]);
 
   const renderPosts = () => {
-
     return filteredEventPosts.map(post => {
       console.log('user: ' + post.userId);
       
-      return <EventPost key={`${post.id}`} eventPost={post}/>
+      return <EventPost 
+        key={`${post.id}`} eventPost={post}
+        onDelete={() => setReloadPostsTrigger(prev => prev + 1)}
+      />
     });
   }
 

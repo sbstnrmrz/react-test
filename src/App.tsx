@@ -22,7 +22,9 @@ function App() {
           <Route path='/event-post' element={<Layout><EventPostPage/></Layout>}/>
           <Route path='/event/:id' element={<Layout><EventPostPage/></Layout>}/>
           <Route path='/dashboard' element={<Layout><DashboardPage/></Layout>}/>
-          <Route path='*' element={<NotFoundPage/>}/>
+          <Route path='/not-found' element={<NotFoundPage/>}/>
+          <Route path='*' element={<Navigate to="/not-found" replace/>}/>
+
         </Routes>
       </BrowserRouter>
     </AppContextProvider>

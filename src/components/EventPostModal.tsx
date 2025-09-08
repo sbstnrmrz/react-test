@@ -17,7 +17,7 @@ export const EventPostModal = (props: EventPostModalProps) => {
   const [title, setTitle] = useState('');
   const [takePlaceDate, setTakePlaceDate] = useState<Date | undefined>();
   const [postButtonDisabled, setPostButtonDisabled] = useState(false);
-
+  const [showErrorMsg, setShowErrorMsg] = useState(false);
 
   const navigate = useNavigate();
 
@@ -37,7 +37,7 @@ export const EventPostModal = (props: EventPostModalProps) => {
             setTakePlaceDate(date);
           }}
           />
-          <input className="input-style block border-1 border-white " 
+          <input className="input-style3 block border-1 border-white " 
             type="text" 
             placeholder="Title"
             value={title}
@@ -57,6 +57,9 @@ export const EventPostModal = (props: EventPostModalProps) => {
             maxLength={150}
           >
           </textarea>
+          {showErrorMsg &&
+            <span className="text-red-400 text-center">Event cant take place in the past</span>
+          }
         </div>
         <div className="flex justify-end">
           <button 
@@ -67,10 +70,14 @@ export const EventPostModal = (props: EventPostModalProps) => {
               console.log('takes place');
               
               console.log(takePlaceDate);
+              // checks if the take place date its in the past
+              // example: if date is september 8th, take place date cant be september 7th
               if (takePlaceDate == undefined || takePlaceDate.getTime() <= Date.now()) {
                 console.log('date is less than current date');
+                setShowErrorMsg(true);
                 return;
               }
+              // checks if event title or description are empty
               if (description.length < 1 || title.length < 1) {
                 console.log('description or title is empty');
                 return;
@@ -85,6 +92,7 @@ export const EventPostModal = (props: EventPostModalProps) => {
               console.log('event:');
               console.log(_event);
 
+              // creates the event and redirects to the just create event page
               setPostButtonDisabled(true);
               const createdEvent = await api.Events.createEventPost(_event);
               navigate(`/event/${createdEvent.id}`);

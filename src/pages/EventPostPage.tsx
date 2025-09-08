@@ -3,49 +3,59 @@ import { useNavigate, useParams } from "react-router-dom";
 import { PostComment } from "../components/PostComment"
 import { createComment, getEventComments, _Comment } from "../api/comments";
 import { getUserById, User } from "../api/users";
-import { getEventPost, _Event } from "../api/events";
+import { checkEventExists, getEventPost, _Event } from "../api/events";
 import { getFmtDate, getFmtDuration, getFmtTime, getFmtTimeSecs } from "../utils/utils";
 import { AppContext } from "../context/AppContext";
 import { EventPostModal } from "../components/EventPostModal";
 import { PostCommentModal } from "../components/PostCommentModal";
-import { log } from "console";
 
 export const EventPostPage = () => {
   const navigate = useNavigate();
   const {id} = useParams();
-  if (id == undefined) {
-    navigate('/dashboard'); 
-  }
 
   const _id = id != undefined ? id : '';
 
   const {loggedUser} = useContext(AppContext); 
 
-
-
   const [event, setEvent] = useState<_Event | undefined>();
 
   const [comments, setComments] = useState<_Comment[]>([]);
+  const [filteredComments, setFilteredComments] = useState<_Comment[]>([]);
   const [user, setUser] = useState<User | undefined>();
   const [commentText, setCommentText] = useState('');
   const [postCommentDisabled, setPostCommentDisabled] = useState(false);
   const [showCommentModal, setShowCommentModal] = useState(false);
   const [reloadCommentsTrigger, setReloadCommentsTrigger] = useState(0);
   const [timeLeft, setTimeLeft] = useState<number | undefined>(undefined);
+  const [commentsFilter, setCommentsFilter] = useState('Last Added');
 
   useEffect(() => {
     const controller = new AbortController();
 
     const loadEvent = async() => {
-      const _event = await getEventPost(_id);
-      setEvent(_event);
-      console.log(`event ${_event.id} info loaded`);
+      if (!id) {
+        navigate('/dashboard'); 
+      }
+      try {
+        const _event = await getEventPost(_id);
+        if (!_event) {
+          console.log(`event ${id} not found`);
+          navigate('/not-found');
+        }
+        setEvent(_event);
+        console.log(`event ${_event.id} info loaded`);
 
-      const _user = await getUserById(_event?.userId != undefined ? _event.userId : '' );
-      console.log(`got user from event ${_event?.id}: ${_user.username}`);
-      
-      setUser(_user);
-      console.log(`user ${_user.username} loaded`);
+        const _user = await getUserById(_event?.userId != undefined ? _event.userId : '' );
+        console.log(`got user from event ${_event?.id}: ${_user.username}`);
+
+        setUser(_user);
+        console.log(`user ${_user.username} loaded`);
+        setTimeLeft(_event?.takesPlace - Date.now());
+
+      } catch (error) {
+        console.error('failed to fetch event:', error);
+        navigate('/not-found');
+      }
     }
 
     loadEvent();
@@ -59,10 +69,20 @@ export const EventPostPage = () => {
     const loadComments = async() => {
       const _comments = await getEventComments(_id);
       setComments(_comments);
+      setFilteredComments(_comments);
       console.log('comments loaded');
     }
 
-    loadComments();
+    if (comments.length < 1) loadComments();
+    const sorted = [...comments].sort((a, b) => {
+      // if comment B - A is negative means that A was created before
+        if (commentsFilter === 'Last Added') {
+          return b.createdAt - a.createdAt;
+        } else {
+          return a.createdAt - b.createdAt;
+        }
+    });
+    setFilteredComments(sorted);
   
     return () => {
     }
@@ -86,7 +106,12 @@ export const EventPostPage = () => {
   }
 
   const renderComments = () => {
-    return comments.map(comment => <PostComment comment={comment}/>);
+    return filteredComments.map(comment => 
+      <PostComment 
+        key={comment.id}
+        comment={comment}
+        onDelete={() => {setReloadCommentsTrigger(prev => prev+1)}}
+      />);
   }
 
   const fmtName = `${user?.firstName} ${user?.lastName}`;
@@ -107,7 +132,7 @@ export const EventPostPage = () => {
       <div className="bottom-0 text-gray-400 my-2">
         <span className="block">{`Published: ${getFmtDate(date)} - ${getFmtTime(date)}`}</span>
         <span className="block">{`Takes place: ${getFmtDate(takesPlaceDate)} - ${getFmtTime(takesPlaceDate)}`}</span>
-        <span>Time until: {`${timeLeft != undefined ? getFmtDuration(timeLeft) : undefined}`}</span>
+        <span>Time left: {`${timeLeft != undefined ? getFmtDuration(timeLeft) : undefined}`}</span>
         
       </div>
 
@@ -164,6 +189,17 @@ export const EventPostPage = () => {
 
       </div>
       <hr/>
+      <label htmlFor="">Filter</label>
+      <select name="" id="" 
+        className="input-style mt-4 ml-2"
+        onChange={(e) => {
+          setCommentsFilter(e.target.value);
+          setReloadCommentsTrigger(prev => prev + 1);
+        }}
+      >
+        <option value="Last Added">Last Added</option>
+        <option value="First Added">First Added</option>
+      </select>
 
       <div className="comments-container flex flex-col mt-4 gap-4 w-full">
         {renderComments()}

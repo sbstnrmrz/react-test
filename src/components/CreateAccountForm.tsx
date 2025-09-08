@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { AppContext } from "context/AppContext";
+import { useContext, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form"
+import { useNavigate } from "react-router-dom";
 import * as api from '../api/index'
 
 type Inputs = {
@@ -10,7 +12,13 @@ type Inputs = {
   password: string,
 };
 
-export const CreateAccountForm = () => {
+interface CreateAccountFormProps {
+  onCreate?: () => void
+}
+
+export const CreateAccountForm = (props: CreateAccountFormProps) => {
+  const context = useContext(AppContext);
+  const navigate = useNavigate();
   const {register, handleSubmit, formState: {errors}} = useForm<Inputs>()
   const [data, setData] = useState('');
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
@@ -33,6 +41,17 @@ export const CreateAccountForm = () => {
     };
 
     await api.Users.createUser(user);
+    const _user = await api.Users.getUser(user.username);
+
+    api.Users.saveUserToLocalStorage(_user);
+    context.setLoggedUser(_user);
+    console.log(`login with user: ${data.username} successful!`);
+    navigate(`/dashboard`);
+
+    if (props.onCreate) {
+      
+      props.onCreate();
+    }
   }
 
   return (

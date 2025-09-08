@@ -5,6 +5,7 @@ import { AppContext } from "../context/AppContext";
 import * as api from '../api/index'
 import { _Event } from "../api/events";
 import {EventPost} from "../components/EventPost"
+import { modifyUser, saveUserToLocalStorage } from "api/users";
 
 type Inputs = {
   firstName: string,
@@ -25,8 +26,10 @@ export const ProfilePage = () => {
 
   const [user, setUser] = useState<api.Users.User | undefined>();
   const [isUserLogged, setIsUserLogged] = useState(false);
+  const [saveChangesButtonDisabled, setSaveChangesButtonDisabled] = useState(false);
 
   const [posts, setPosts] = useState<_Event[]>([]);
+
   
   const navigate = useNavigate();
   const {username} = useParams();
@@ -34,7 +37,8 @@ export const ProfilePage = () => {
   useEffect(() => {
     if (!username) return;
     const controller = new AbortController();
-
+    
+    // loads user info
     const loadUser = async() => {
       try {
         if (username == undefined) return;
@@ -68,7 +72,26 @@ export const ProfilePage = () => {
 
 
   const onSubmit: SubmitHandler<Inputs> = async(data) => {
+    if (loggedUser == undefined) return;    
 
+    const checkUserExists = await api.Users.checkUserExists(data.username);
+    if (checkUserExists && loggedUser.username != data.username) return; 
+    
+    // copies the logged user and modifies it to send it to the backend
+    const user: api.Users.User = {
+      ...loggedUser,
+      username: data.username,
+      firstName: data.firstName,
+      lastName: data.lastName,
+    };
+
+    setSaveChangesButtonDisabled(true);
+    await modifyUser(user);
+    setSaveChangesButtonDisabled(false);
+    saveUserToLocalStorage(user);
+    hideModal();
+
+    navigate(`/profile/${user.username}`);
   }
 
   const renderPosts = () => {
@@ -94,9 +117,9 @@ export const ProfilePage = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6">
             <div>
               <span className="block text-base font-bold">First name</span>
-              <input className="input-style" type="text" 
+              <input className="input-style3" type="text" 
                 {...register("firstName", {
-                  value: 'nombre',
+                  value: loggedUser?.firstName,
                   required: 'first name is required',
                   pattern: {
                     value: /^[A-Za-z]+$/,
@@ -109,9 +132,9 @@ export const ProfilePage = () => {
             </div>
             <div>
               <span className="block text-base font-bold">Last name</span>
-              <input className="input-style" type="text" 
+              <input className="input-style3" type="text" 
                 {...register("lastName", {
-                  value: 'apellido',
+                  value: loggedUser?.lastName,
                   required: 'last name is required',
                   pattern: {
                     value: /^[A-Za-z]+$/,
@@ -124,9 +147,9 @@ export const ProfilePage = () => {
             </div>
             <div>
               <span className="block text-base font-bold">Username</span>
-              <input className="input-style" type="text" 
+              <input className="input-style3" type="text" 
                 {...register("username", {
-                    value: 'user',
+                  value: loggedUser?.username,
                   required: 'username is required',
                   pattern: {
                     value: /^[A-Za-z0-9$*#_\-.]+$/,
@@ -136,7 +159,7 @@ export const ProfilePage = () => {
                 } 
               />
             </div>
-            <button className="button-style">Save Changes</button>
+            <button className="button-style" disabled={saveChangesButtonDisabled}>Save Changes</button>
           </form>
           </div>
 
@@ -152,12 +175,14 @@ export const ProfilePage = () => {
               <span className="text-base">{`${user?.email}`}</span>
             }
           </div>
-          <button 
-            className="button-style h-10"
-            onClick={() => setShowEditModal(!showEditModal)}
-          >
-            Edit Account Info
-          </button>
+          {loggedUser?.username == user?.username &&
+            <button 
+              className="button-style h-10"
+              onClick={() => setShowEditModal(!showEditModal)}
+            >
+              Edit Account Info
+            </button>
+          }
         </div>
         <hr className="my-4"/>
         <div className="event-posts-container" onClick={() => {}}> 

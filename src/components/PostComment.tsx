@@ -21,6 +21,7 @@ export const PostComment = ({comment, onDelete}: PostCommentProps) => {
   useEffect(() => {
     const controller = new AbortController();
 
+    // loads user info 
     const loadUser = async() => {
       const _user = await getUserById(comment.userId);
       setUser(_user);
@@ -52,7 +53,9 @@ export const PostComment = ({comment, onDelete}: PostCommentProps) => {
         {`${date} - ${time}`}
       </div>
 
-      {loggedUser?.id == comment.userId &&
+      
+      {// checks if the comment belongs to the logged user to show the delete option 
+        loggedUser?.id == comment.userId &&
         <div className="flex justify-end">
           <span className="cursor-pointer hover:underline"
             onClick={async() => {

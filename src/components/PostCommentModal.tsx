@@ -1,4 +1,5 @@
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { createComment, _Comment } from "../api/comments";
 import { AppContext } from "../context/AppContext";
 
@@ -12,6 +13,7 @@ export const PostCommentModal = (props: PostCommentModalProps) => {
   const {loggedUser} = useContext(AppContext);
   const [commentText, setCommentText] = useState('');;
   const [postCommentDisabled, setPostCommentDisabled] = useState(false);
+  const navigate = useNavigate();
 
   if (props.eventId == 'noId') {
     if (props.onClose != undefined) props.onClose();
@@ -45,6 +47,7 @@ export const PostCommentModal = (props: PostCommentModalProps) => {
             className="button-style "
             onClick={async() => {
               if (loggedUser?.id == undefined) return;
+              if (commentText.length < 1) return;
               const comment: _Comment = {
                 text: commentText,
                 userId: loggedUser.id,
@@ -53,9 +56,11 @@ export const PostCommentModal = (props: PostCommentModalProps) => {
               }
 
                           
+              // creates the comment and redirects to the event commented
               setPostCommentDisabled(true);
               await createComment(comment);
               setPostCommentDisabled(false);
+              navigate(`/event/${comment.eventId}`);
               if (props.onClose != undefined) props.onClose();
               
             }}  

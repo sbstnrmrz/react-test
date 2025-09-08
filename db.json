@@ -4,7 +4,7 @@
       "id": "ff3b",
       "firstName": "Pedro",
       "lastName": "Perez",
-      "username": "pedro25",
+      "username": "pedro30",
       "email": "pedro.perez@gmail.com",
       "password": "contrA.25",
       "createdAt": "2025-08-28T20:11:06.179Z"
@@ -17,6 +17,33 @@
       "email": "skibidi.fernandez@gmail.com",
       "password": "qweasD25$",
       "createdAt": "2025-08-30T17:30:45.107Z"
+    },
+    {
+      "id": "4624",
+      "firstName": "Maria",
+      "lastName": "Gonzales",
+      "username": "mariag07",
+      "email": "maria.gonzales@gmail.com",
+      "password": "passworD$123",
+      "createdAt": "2025-09-08T20:39:03.087Z"
+    },
+    {
+      "id": "701f",
+      "firstName": "Fernando",
+      "lastName": "Fernandez",
+      "username": "fernan23",
+      "email": "fernando.fernandez@gmail.com",
+      "password": "miClave$1234",
+      "createdAt": "2025-09-08T20:57:00.239Z"
+    },
+    {
+      "id": "3e00",
+      "firstName": "Pedro",
+      "lastName": "Pablo",
+      "username": "pedrop12",
+      "email": "pedro.pablo@gmail.com",
+      "password": "claveSecreta*123",
+      "createdAt": "2025-09-08T21:08:29.110Z"
     }
   ],
   "events": [
@@ -27,7 +54,84 @@
       "userId": "d490",
       "createdAt": 1757305722154,
       "takesPlace": 1758772800000
+    },
+    {
+      "id": "c8bc",
+      "title": "mi primer post",
+      "description": "que bien",
+      "userId": "ff3b",
+      "createdAt": 1757343830087,
+      "takesPlace": 1758528000000
+    },
+    {
+      "id": "3d6b",
+      "title": "zxczx",
+      "description": "xq1",
+      "userId": "ff3b",
+      "createdAt": 1757343883814,
+      "takesPlace": 1758268800000
+    },
+    {
+      "id": "7f17",
+      "title": "Reunion crazy imagine",
+      "description": "a las 1",
+      "userId": "ff3b",
+      "createdAt": 1757357046727,
+      "takesPlace": 1757908800000
+    },
+    {
+      "id": "f166",
+      "title": "Reunion crazy imagine",
+      "description": "a las one de la tarde",
+      "userId": "ff3b",
+      "createdAt": 1757358317390,
+      "takesPlace": 1757955600000
+    },
+    {
+      "id": "1514",
+      "title": "salir a correr",
+      "description": "so",
+      "userId": "701f",
+      "createdAt": 1757365088894,
+      "takesPlace": 1759262400000
+    },
+    {
+      "id": "e254",
+      "title": "este es mi evento",
+      "description": "muy bueno",
+      "userId": "3e00",
+      "createdAt": 1757365729508,
+      "takesPlace": 1758729600000
     }
   ],
-  "comments": []
+  "comments": [
+    {
+      "id": "1ee0",
+      "text": "buenos dias\n",
+      "userId": "ff3b",
+      "eventId": "fbad",
+      "createdAt": 1757343665906
+    },
+    {
+      "id": "f23b",
+      "text": "que buen post",
+      "userId": "ff3b",
+      "eventId": "c8bc",
+      "createdAt": 1757344509312
+    },
+    {
+      "id": "2d39",
+      "text": "a scubi du",
+      "userId": "ff3b",
+      "eventId": "c8bc",
+      "createdAt": 1757344723866
+    },
+    {
+      "id": "3938",
+      "text": "queloque",
+      "userId": "ff3b",
+      "eventId": "c8bc",
+      "createdAt": 1757345169769
+    }
+  ]
 }

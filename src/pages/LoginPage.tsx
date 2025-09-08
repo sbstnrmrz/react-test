@@ -18,16 +18,19 @@ export const LoginPage = () => {
   ];
   const [isLogin, setIsLogin] = useState(true);
   const [currSectionMsg, setCurrSectionMsg] = useState(sectionMsg[0]);
+  const [showCreatedAccount, setShowCreatedAccount] = useState(true);
 
+  // renders the form for login or create account
   const renderSection = () => {
     if (isLogin) {
       return <LoginAccountForm/>;
     } 
 
-    return <CreateAccountForm/>;
+    return <CreateAccountForm onCreate={() => {}}/>;
   }
 
   useEffect(() => {
+    // checks if there is a user is logged in and redirects to dashboard
     if (api.Users.isUserLogged()) {
       const user = api.Users.getUserFromLocalStorage();
       if (user == undefined) return;
@@ -46,9 +49,10 @@ export const LoginPage = () => {
             setCurrSectionMsg(isLogin ? sectionMsg[0] : sectionMsg[1]);
             setIsLogin(!isLogin);
           }}
-          href='#' className="mt-4 text-blue-300 underline flex justify-center text-xs">{currSectionMsg}
+          className="mt-4 text-blue-300 underline flex justify-center text-xs">{currSectionMsg}
         </a>
       </div>
+      <span></span>
     </div>
   )
 }

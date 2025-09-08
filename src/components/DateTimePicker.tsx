@@ -19,44 +19,51 @@ interface DateTimePickerProps {
 }
 
 export function DateTimePicker(props: DateTimePickerProps) {
-  const [open, setOpen] = React.useState(false);
   const [date, setDate] = React.useState<Date | undefined>(undefined);
+  const [time, setTime] = React.useState<string>('');
+  const [isPopoverOpen, setIsPopoverOpen] = React.useState(false);
+
+  // formats the date string 
+  const combineDateAndTime = (selectedDate?: Date, selectedTime?: string) => {
+    if (!selectedDate || !selectedTime) {
+      return undefined;
+    }
+    const [hours, minutes] = selectedTime.split(':').map(Number);
+    const combinedDate = new Date(selectedDate);
+    combinedDate.setHours(hours, minutes, 0, 0);
+
+    return combinedDate;
+  };
 
   return (
-    <div className="flex gap-4">
+    <div className="flex gap-4 items-center">
       <Label htmlFor="date-picker" className="px-1 text-[16px]">
-        Takes place 
+        Takes place
       </Label>
       <div className="flex flex-col gap-3">
-        <Popover open={open} onOpenChange={setOpen}>
+        <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
           <PopoverTrigger asChild>
             <Button
               variant="outline"
               id="date-picker"
-              className="w-32 justify-between font-normal"
+              className="w-32 justify-between font-normal bg-neutral-800 border border-neutral-700"
             >
               {date ? date.toLocaleDateString() : "Select date"}
-              <ChevronDownIcon />
+              <ChevronDownIcon className="w-4 h-4" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto overflow-hidden p-0" align="start">
             <Calendar
-              mode="single"
               style={{background: '#262626', color: 'white', borderColor: 'white', outlineColor: 'white'}}
+              mode="single"
               selected={date}
-              captionLayout="dropdown"
-              onSelect={(_date) => {
-                console.log('skibidi correct');
-
-                _date?.setHours(date != undefined ? date.getHours() : 0); 
-                setDate(_date);
-
+              onSelect={(selectedDate) => {
+                setDate(selectedDate);
+                setIsPopoverOpen(false);
+                const combined = combineDateAndTime(selectedDate, time);
                 if (props.onDateSelected) {
-                  props.onDateSelected(_date);
+                  props.onDateSelected(combined);
                 }
-                console.log('date: ' + _date);
-
-                setOpen(false);
               }}
             />
           </PopoverContent>
@@ -68,28 +75,19 @@ export function DateTimePicker(props: DateTimePickerProps) {
           id="time-picker"
           step="1"
           className="bg-background appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
-            
           onChange={(e) => {
-            console.log('selected time: ' + e.target.value);
-            const s = e.target.value.split(':');
-            
-            const hours = parseInt(s[0]);
-            const mins = parseInt(s[1]);
-            const secs = parseInt(s[2]);
-            if (date) {
-              const newDate = new Date(date);
-              newDate.setHours(hours, mins, secs);
-              setDate(newDate);
+            const newTime = e.target.value;
+            setTime(newTime);
+            const combined = combineDateAndTime(date, newTime);
+            if (props.onDateSelected) {
+              props.onDateSelected(combined);
             }
 
-            if (props.onDateSelected) {
-              props.onDateSelected(date);
-            }
 
           }}
         />
       </div>
     </div>
-  )
+  );
 }
 

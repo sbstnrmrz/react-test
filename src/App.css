@@ -25,6 +25,9 @@
   @apply border-1 border-[#222222] bg-[#404040] rounded-[6px] py-[4px] px-[12px]
 }
 
+.input-style3 {
+  @apply text-base rounded-[6px] py-[4px] px-[12px] border-1 border-white focus:outline-1}
+
 .button-style {
   @apply cursor-pointer flex text-base items-center justify-center font-medium rounded-[6px] bg-white text-black px-4 py-2 hover:bg-white/90
 }
@@ -65,8 +68,6 @@
 .event-post {
   @apply cursor-pointer p-4 rounded-[6px] border-white border-1 break-words
 }
-
-
 
 @custom-variant dark (&:is(.dark *));
 

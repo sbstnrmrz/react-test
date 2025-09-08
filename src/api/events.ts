@@ -74,3 +74,16 @@ export const deleteEvent = async(eventId: string) => {
   }
 }
 
+export const checkEventExists = async(id: string) => {
+  try {
+    const res = await fetch(`${apiUrl}/events?id=${id}`); 
+    if (res.status === 404) {
+      return false;
+    }
+
+    return true;
+  } catch (error) {
+    throw `error deleting event: ${error}`;  
+  }
+}
+
