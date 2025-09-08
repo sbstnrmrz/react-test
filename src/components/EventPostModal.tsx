@@ -2,6 +2,9 @@ import { useContext, useState } from "react"
 import { AppContext } from "../context/AppContext";
 import * as api from '../api/index'
 import { useNavigate } from "react-router-dom";
+import { DatePicker } from "./DatePicker";
+import { DateTimePicker } from "./DateTimePicker";
+import { log } from "console";
 
 interface EventPostModalProps {
   show?: boolean,
@@ -12,8 +15,9 @@ export const EventPostModal = (props: EventPostModalProps) => {
   const {loggedUser} = useContext(AppContext);
   const [description, setDescription] = useState('');
   const [title, setTitle] = useState('');
-  const [takePlaceDate, setTakePlaceData] = useState('');
+  const [takePlaceDate, setTakePlaceDate] = useState<Date | undefined>();
   const [postButtonDisabled, setPostButtonDisabled] = useState(false);
+
 
   const navigate = useNavigate();
 
@@ -29,7 +33,11 @@ export const EventPostModal = (props: EventPostModalProps) => {
           </button>
         </div>
         <div className="flex flex-col my-4 gap-4">
-          <input className="input-style2 block h-12 text-[24px]" 
+          <DateTimePicker onDateSelected={(date) => {
+            setTakePlaceDate(date);
+          }}
+          />
+          <input className="input-style block border-1 border-white " 
             type="text" 
             placeholder="Title"
             value={title}
@@ -48,22 +56,25 @@ export const EventPostModal = (props: EventPostModalProps) => {
           >
           </textarea>
         </div>
-        <div className="flex justify-between items-end">
-          <div>
-          <h1>Takes Place</h1>
-          <input className="input-style" type="text" />
-          </div>
+        <div className="flex justify-end">
           <button 
             className="button-style "
             onClick={async() => {
               console.log('clicked post');
               const userId = loggedUser?.id ? loggedUser.id : 'noIdProvided';
+              console.log('takes place');
+              
+              console.log(takePlaceDate);
+              if (takePlaceDate == undefined || takePlaceDate.getTime() <= Date.now()) {
+                console.log('date is less than current date');
+                return;
+              }
               const _event: api.Events._Event = {
                 title: title,
                 description: description,
                 userId: userId,
                 createdAt: Date.now(),
-                takesPlace: Date.now() + 1000,
+                takesPlace: takePlaceDate.getTime(),
               } 
               console.log('event:');
               console.log(_event);

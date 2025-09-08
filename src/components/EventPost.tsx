@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { getEventComments, _Comment } from "../api/comments";
 import { _Event } from "../api/events"
 import { getUserById, User } from "../api/users";
+import { getFmtDate, getFmtTime } from "../utils/utils";
 import { PostCommentModal } from "./PostCommentModal";
 
 interface EventPostProps {
@@ -10,15 +11,16 @@ interface EventPostProps {
 }
 
 export const EventPost = (props: EventPostProps) => {
-  const {title, description, createdAt, id, userId} = props.eventPost;
+  const {title, description, createdAt, id, userId, takesPlace} = props.eventPost;
   const _id = id == undefined ? 'noId' : id;
-  const date = new Date(createdAt);
+
   const navigate = useNavigate();
 
-  const day = date.getDay().toString();
-  const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
-  const year = date.getFullYear().toString();
-  const fmtDate = `${month} ${day}, ${year}`;
+  const fmtPublishedDate = getFmtDate(createdAt);
+  const fmtPublishedTime = getFmtTime(createdAt);
+
+  const fmtTakesPlaceDate = getFmtDate(takesPlace);
+  const fmtTakesPlaceTime = getFmtTime(takesPlace);
 
   const [comments, setComments] = useState<_Comment[]>([]);
   const [showCommentModal, setShowCommentModal] = useState(false);
@@ -71,8 +73,10 @@ export const EventPost = (props: EventPostProps) => {
       </div>
       <span className="block text-[22px] font-bold">{title}</span>
       <p>{description}</p>
-      <div className="bottom-0 text-gray-400 my-2">
-        {fmtDate} | Ocurre el: 08/08/25 | Tiempo restante: 20 dias
+      <div className="flex flex-col bottom-0 text-gray-400 my-2">
+        <span>{`Published: ${fmtPublishedDate} - ${fmtPublishedTime}`}</span>
+        <span>{`Takes place: ${fmtTakesPlaceDate} - ${fmtTakesPlaceTime}`}</span>
+        
       </div>
       <div className="flex grow-0 bottom-0 text-gray-400">
         <a className="flex items-center gap-1 fill-gray-400 text-gray-400 hover:text-white hover:fill-white cursor-pointer"

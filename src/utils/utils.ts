@@ -1,6 +1,6 @@
 export const getFmtDate = (timestamp: number) => {
   const date = new Date(timestamp);
-  const day = date.getDay().toString();
+  const day = date.getDate().toString();
   const month = new Intl.DateTimeFormat('en-US', { month: 'short' }).format(date);
   const year = date.getFullYear().toString();
 
@@ -17,6 +17,7 @@ export const getFmtTime = (timestamp: number) => {
   hours = hours % 24;
 
   const _minutes = minutes.toString().padStart(2, '0');
+  const _hours = hours.toString().padStart(2, '0');
 
-  return `${hours}:${minutes} ${ampm}`;
+  return `${_hours}:${_minutes} ${ampm}`;
 }

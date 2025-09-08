@@ -32,7 +32,6 @@ export const DashboardPage = () => {
     }
     loadEventPosts();
     if (users.length < 1) loadUsers();
-    
   }, []);
 
   useEffect(() => {
@@ -53,23 +52,6 @@ export const DashboardPage = () => {
 
     setFilteredEventPosts(filtered);
   }, [userFilter, filterText]);
-  
-
-
-  const handleFilter = (filter: string) => {
-    if (filter === 'All') {
-      setFilteredEventPosts(eventPosts);
-      return
-    }
-    const targetUser = users.find(user => user.username === filter);
-    if (targetUser == undefined) return;
-
-    const filtered = eventPosts.filter(post => post.userId == targetUser.id);
-    console.log('filtered posts');
-    console.log(filtered);
-    
-    setFilteredEventPosts(filtered);
-  }
 
   const renderPosts = () => {
 
@@ -91,11 +73,10 @@ export const DashboardPage = () => {
             setFilterText(e.target.value);
           }}
         />
-        <select className="input-style h-10" name="" id=""
+        <label htmlFor="">Filter by user</label>
+        <select className="input-style h-10 ml-2" name="" id=""
           onChange={(e) => {
             setUserFilter(e.target.value);
-//          handleFilter(e.target.value);
-//          console.log(e.target.value);
           }}
         >
           <option value="All">All</option>
