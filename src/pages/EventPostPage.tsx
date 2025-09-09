@@ -73,9 +73,9 @@ export const EventPostPage = () => {
       console.log('comments loaded');
     }
 
-    if (comments.length < 1) loadComments();
+    loadComments();
     const sorted = [...comments].sort((a, b) => {
-      // if comment B - A is negative means that A was created before
+      // if comment B - A is negative means that comment A was created before
         if (commentsFilter === 'Last Added') {
           return b.createdAt - a.createdAt;
         } else {
@@ -92,6 +92,7 @@ export const EventPostPage = () => {
     if (!event) {
       return;
     }
+    // calculates the time left between current date and the take place date and updates the counter every second
     const calcTimeLeft = () => event.takesPlace - Date.now();
     const timer = setInterval(() => {
       setTimeLeft(calcTimeLeft());
@@ -110,7 +111,8 @@ export const EventPostPage = () => {
       <PostComment 
         key={comment.id}
         comment={comment}
-        onDelete={() => {setReloadCommentsTrigger(prev => prev+1)}}
+        onDelete={() => {
+          setReloadCommentsTrigger(prev => prev+1)}}
       />);
   }
 
@@ -139,7 +141,11 @@ export const EventPostPage = () => {
       <hr/>
 
       {showCommentModal &&
-        <PostCommentModal onClose={() => {handleCommentAdded()}}
+        <PostCommentModal 
+          onClose={() => {
+            console.warn('aja');
+          handleCommentAdded()
+          }}
           eventId={event?.id != undefined ? event.id : 'noId'}
         />
       }

@@ -60,9 +60,8 @@ export const PostCommentModal = (props: PostCommentModalProps) => {
               setPostCommentDisabled(true);
               await createComment(comment);
               setPostCommentDisabled(false);
+              if (props.onClose) props.onClose();
               navigate(`/event/${comment.eventId}`);
-              if (props.onClose != undefined) props.onClose();
-              
             }}  
             disabled={postCommentDisabled}
           >
